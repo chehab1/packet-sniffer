@@ -3,7 +3,7 @@
 **How to run:**
 
 ```bash
-python sniffer.py  -v -i "Ethernet"
+python sniffer.py  -i "Ethernet"
 ```
 
 Replace "Ethernet" with yout network interace

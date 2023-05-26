@@ -1,12 +1,18 @@
 import argparse
 from scapy.all import *
 import socket
+import json
 
 
 class Sniffer:
     def __init__(self, args):
         self.args = args
         self.local_ip = self.get_local_ip()
+        self.index = 0
+        self.running = False
+        self.json_file_path = 'sniffed_pkts.json'
+        with open(self.json_file_path, 'w') as file:
+            file.write('[\n')
 
     def packet_handler(self, packet):
         if "IP" not in packet:
@@ -19,7 +25,9 @@ class Sniffer:
         src_mac = ""
         dest_mac = ""
         received_or_sent = ""
+        packet_load = ""
 
+        # hexdump(packet)
         src_ip = packet["IP"].src
         dest_ip = packet["IP"].dst
         src_mac = packet["Ether"].src
@@ -36,12 +44,30 @@ class Sniffer:
         elif "UDP" in packet:
             src_port, dest_port, protocol = self.UDP_packet_handler(packet)
 
-        print("Protocol: {} SrcIP: {} SrcPrt: {} DstIP: {} DstPRT: {} {}".format(
-            protocol, src_ip, src_port, dest_ip, dest_port, received_or_sent))
-        # if (packet.haslayer(Raw)):
-        #     print("Payload: {}".format(packet[Raw].load))
-        # print(src_mac, dst_mac)
-        # print("--------------------------------------------------")
+        packet_load = self.get_packet_load(packet)
+
+        packet_record = {
+            "no": self.index,
+            "Protocol": protocol,
+            "SrcIP": src_ip,
+            "SrcPrt": src_port,
+            "DstIP": dest_ip,
+            "DstPrt": dest_port,
+            "status": received_or_sent,
+            "Info": {
+                "Ethernet": {"dst": dest_mac,
+                             "src": src_mac,
+                             "type": "IPv4"
+                             }
+            },
+            "Payload": str(packet_load)
+        }
+        with open(self.json_file_path, 'a') as file:
+            file.write(json.dumps(packet_record))
+            file.write(',\n')
+        time.sleep(0.3)
+        print(self.index)
+        self.index += 1
 
     def TCP_packet_handler(self, packet):
         source_port = packet["TCP"].sport
@@ -55,6 +81,9 @@ class Sniffer:
         protocol = "UDP"
         return (source_port, destination_port, protocol)
 
+    def get_packet_load(self, packet):
+        return packet["Raw"].load if "Raw" in packet else ""
+
     def get_local_ip(self):
         temp_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         temp_socket.connect(("8.8.8.8", 80))
@@ -62,18 +91,33 @@ class Sniffer:
         temp_socket.close()
         return local_ip
 
-    def sniff(self):
-        sniff(iface=self.args.interface, prn=self.packet_handler, store=0)
+    def start_sniffing(self, duration):
+        self.running = True
+        packet_capture_thread = threading.Thread(target=self.capture_packets)
+        packet_capture_thread.start()
+
+        time.sleep(duration)
+
+        self.stop_sniffing()
+
+    def capture_packets(self):
+        while self.running:
+            sniff(iface=self.args.interface,
+                  prn=self.packet_handler, count=1, store=0)
+
+    def stop_sniffing(self):
+        time.sleep(0.3)
+        with open(self.json_file_path, 'a') as file:
+            file.write(']')
+        self.running = False
 
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument('-v', '--verbose', default=False,
-                        action='store_true', help='be more talkative')
     parser.add_argument('-i', '--interface', type=str,
                         required=True, help='network interface name')
     args = parser.parse_args()
     sniffer = Sniffer(args)
 
     print("Started Sniffing on interface {}".format(args.interface))
-    sniffer.sniff()
+    sniffer.start_sniffing(5)
