@@ -1,0 +1,16 @@
+
+
+
+.tableContainer{
+    margin-top: 50px;
+    height: 400px !important;
+    overflow-y:scroll !important;
+}
+td > button{
+    background-color: white;
+    border: 0px;
+    cursor: pointer;
+}
+tr > td:last-child{
+    width: 10px !important;
+}
