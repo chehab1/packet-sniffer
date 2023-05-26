@@ -65,7 +65,7 @@ class Sniffer:
         with open(self.json_file_path, 'a') as file:
             file.write(json.dumps(packet_record))
             file.write(',\n')
-        time.sleep(0.3)
+        # time.sleep(0.3)
         print(self.index)
         self.index += 1
 
@@ -106,7 +106,7 @@ class Sniffer:
                   prn=self.packet_handler, count=1, store=0)
 
     def stop_sniffing(self):
-        time.sleep(0.3)
+        #time.sleep(0.3)
         with open(self.json_file_path, 'a') as file:
             file.write(']')
         self.running = False
@@ -120,4 +120,4 @@ if __name__ == "__main__":
     sniffer = Sniffer(args)
 
     print("Started Sniffing on interface {}".format(args.interface))
-    sniffer.start_sniffing(5)
+    sniffer.start_sniffing(10)
