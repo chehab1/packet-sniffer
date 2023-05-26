@@ -1,0 +1,27 @@
+
+
+.Header{
+    margin-top: 20px;
+}
+#start{
+    background-color: rgb(4, 129, 254);
+    color: white;
+    border: 0;
+    padding: 10px;
+    border-radius: 5px;
+    width: 150px;
+    font-size: 15px;
+    cursor: pointer;
+    margin: 20px;
+}
+#stop{
+    background-color: rgb(207, 7, 7);
+    color: white;
+    border: 0;
+    padding: 10px;
+    border-radius: 5px;
+    width: 150px;
+    font-size: 15px;
+    cursor: pointer;
+    margin: 20px;
+}
