@@ -1,0 +1,9 @@
+
+
+.packet-info{
+    margin-top: 50px;
+}
+.packet-info h3 ,
+.packet-info p{
+    text-align: left;
+}
