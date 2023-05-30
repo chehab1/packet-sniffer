@@ -1,18 +1,14 @@
 import csv
 
-# function that writes its parameters into a csv
-# if the csv file does not exist, it creates one and writes in it
-# if it exists it appends to it
-
+# Write to CSV file
 
 def write_csv(file_path, *args):
-
-    with open(file_path, 'a', newline="") as f:
-        writer = csv.writer(f)
+     with open(file_path, 'a', newline='') as csvfile:
+        writer = csv.writer(csvfile)
         writer.writerow(args)
 
-# for testing
+# Test
 
 if __name__ == '__main__':
-    write_csv('test.csv', 'a', 'b', 'c', 'd', 'e', 'f')
-    write_csv('test.csv', 'g', 'h', 'i', 'j', 'k', 'l')
+    write_csv('test.csv', 'a', 'b', 'c')
+    write_csv('test.csv', 'd', 'e', 'f')
