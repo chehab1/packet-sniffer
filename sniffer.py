@@ -53,7 +53,9 @@ class Sniffer:
                             dest_port, received_or_sent, src_mac, dest_mac, packet_load)
 
         self.packet_to_csv(self.index, protocol, src_ip, src_port, dest_ip,
-                           dest_port, received_or_sent, src_mac, dest_mac, packet_load)
+                           dest_port, received_or_sent, src_mac, dest_mac, "IPv4", packet_load)
+        self.index += 1
+        time.sleep(0.2)
 
     def packet_to_json(self, *args):
         packet_record = {
@@ -75,9 +77,6 @@ class Sniffer:
         with open(self.json_file_path, 'a') as file:
             file.write(json.dumps(packet_record))
             file.write(',\n')
-        time.sleep(0.3)
-        # print(self.index)
-        self.index += 1
 
     def packet_to_csv(self, *args):
         with open(self.csv_file_path, 'a', newline='') as file:
