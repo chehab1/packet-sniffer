@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>lobby</title>
+  </head>
+  <body>
+    <h1>Lets sniff the packets</h1>
+
+    <button id="closeconnection">close connection</button>
+
+    <div id="messages"></div>
+
+    <script type="text/javascript">
+      let url = `ws://${window.location.host}/ws/socket-server/`;
+      const sniffSocket = new WebSocket(url);
+
+      sniffSocket.onopen = function (e) {
+        alert("[open] Connection established");
+        alert("Sending to server");
+        sniffSocket.send("My name is John");
+      };
+
+      sniffSocket.onclose = (e) => {
+        console.log("connection closed");
+      };
+      sniffSocket.onmessage = (e) => {
+        let data = JSON.parse(e.data);
+        console.log(data);
+
+        let messages = document.getElementById("messages");
+        //  messages.insertAdjacentHTML(
+        //    "beforeend",
+        //    `<div>
+        //          <p>${data.name} - ${data.age}</p>
+        //       </div>`
+        //  );
+        messages.innerHTML += `<div>
+                   <p>IPaddress: ${data.IPaddress}</p>
+                   <p>packet: ${data.packet}</p>
+                </div>`;
+      };
+
+      // let form = document.getElementById("form");
+      // form.addEventListener("submit", (e) => {
+      //   e.preventDefault();
+      //   let message = e.target.message.value;
+      //   sniffSocket.send(
+      //     JSON.stringify({
+      //       message: message,
+      //     })
+      //   );
+      //   form.reset();
+      // });
+
+      let closebtn = document.getElementById("closeconnection");
+      closebtn.addEventListener("click", function () {
+        sniffSocket.close();
+      });
+
+      sniffSocket.onclose = (e) => {
+        console.log("connection closed");
+      };
+    </script>
+  </body>
+</html>
