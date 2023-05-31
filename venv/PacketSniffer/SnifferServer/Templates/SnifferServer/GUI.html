@@ -15,18 +15,18 @@
 
     <script type="text/javascript">
       let url = `ws://${window.location.host}/ws/socket-server/`;
-      const chatSocket = new WebSocket(url);
+      const sniffSocket = new WebSocket(url);
 
-      socket.onopen = function (e) {
+      sniffSocket.onopen = function (e) {
         alert("[open] Connection established");
         alert("Sending to server");
-        socket.send("My name is John");
+        sniffSocket.send("My name is John");
       };
 
-      chatSocket.onclose = (e) => {
+      sniffSocket.onclose = (e) => {
         console.log("connection closed");
       };
-      chatSocket.onmessage = (e) => {
+      sniffSocket.onmessage = (e) => {
         let data = JSON.parse(e.data);
         console.log(data);
 
@@ -43,24 +43,24 @@
                 </div>`;
       };
 
-      let form = document.getElementById("form");
-      form.addEventListener("submit", (e) => {
-        e.preventDefault();
-        let message = e.target.message.value;
-        chatSocket.send(
-          JSON.stringify({
-            message: message,
-          })
-        );
-        form.reset();
-      });
+      // let form = document.getElementById("form");
+      // form.addEventListener("submit", (e) => {
+      //   e.preventDefault();
+      //   let message = e.target.message.value;
+      //   sniffSocket.send(
+      //     JSON.stringify({
+      //       message: message,
+      //     })
+      //   );
+      //   form.reset();
+      // });
 
       let closebtn = document.getElementById("closeconnection");
       closebtn.addEventListener("click", function () {
-        chatSocket.close();
+        sniffSocket.close();
       });
 
-      chatSocket.onclose = (e) => {
+      sniffSocket.onclose = (e) => {
         console.log("connection closed");
       };
     </script>
