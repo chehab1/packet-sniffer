@@ -27,14 +27,18 @@ class SnifferConsumer(WebsocketConsumer):
 
         self.accept()
 
-        print("connection started")
-        print("#######################################")
-        print(self.connection)
+      print("connection started")
+      print("#######################################")
+      print(self.connection)
 
-    def disconnect(self, code):
-        self.stop = True
-        del self.thread
-        print("connection closed")
-        print("#######################################")
-        print(self.connection)
-        StopConsumer()
+
+
+      
+   def disconnect(self, code):
+      self.stop = True
+      del self.thread
+      print("connection closed")
+      print("#######################################")
+      print(self.connection)
+      StopConsumer()
+        
