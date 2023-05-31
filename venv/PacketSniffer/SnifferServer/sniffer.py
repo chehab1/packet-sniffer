@@ -6,15 +6,15 @@ import csv
 
 
 class Sniffer:
-    def __init__(self, args, interface):
-        print(args)
-        self.args = args
+    def __init__(self, interface, list_of_packets):
+        # print(interface)
         self.interface = interface
         self.local_ip = self.get_local_ip()
         self.index = 0
         self.running = False
         self.json_file_path = 'sniffed_pkts.json'
         self.csv_file_path = 'sniffed_pkts.csv'
+        self.list_of_packets = list_of_packets
         with open(self.json_file_path, 'w') as file:
             file.write('[\n')
         with open(self.csv_file_path, 'w') as file:
@@ -57,7 +57,8 @@ class Sniffer:
         self.packet_to_csv(self.index, protocol, src_ip, src_port, dest_ip,
                            dest_port, received_or_sent, src_mac, dest_mac, "IPv4", packet_load)
         self.index += 1
-        time.sleep(0.2)
+        # print(self.index)
+        # time.sleep(0.2)
 
     def packet_to_json(self, *args):
         packet_record = {
@@ -76,6 +77,8 @@ class Sniffer:
             },
             "Payload": str(args[8])
         }
+        self.list_of_packets.append(packet_record)
+         
         with open(self.json_file_path, 'a') as file:
             file.write(json.dumps(packet_record))
             file.write(',\n')
@@ -126,12 +129,12 @@ class Sniffer:
             file.write(']')
 
 
-if __name__ == "__main__":
-    # parser = argparse.ArgumentParser()
-    # parser.add_argument('-i', '--interface', type=str,
-    #                     required=True, help='network interface name')
-    # args = parser.parse_args()
-    sniffer = Sniffer("mina", "Ethernet")
+# if __name__ == "__main__":
+#     parser = argparse.ArgumentParser()
+#     parser.add_argument('-i', '--interface', type=str,
+#                         required=True, help='network interface name')
+#     args = parser.parse_args()
+#     sniffer = Sniffer(args)
 
-    # print("Started Sniffing on interface {}".format(args.interface))
-    sniffer.start_sniffing(4)
+#     print("Started Sniffing on interface {}".format(args.interface))
+#     sniffer.start_sniffing(10)
