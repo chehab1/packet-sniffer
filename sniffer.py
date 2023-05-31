@@ -2,6 +2,7 @@ import argparse
 from scapy.all import *
 import socket
 import json
+import csv
 
 
 class Sniffer:
@@ -11,8 +12,12 @@ class Sniffer:
         self.index = 0
         self.running = False
         self.json_file_path = 'sniffed_pkts.json'
+        self.csv_file_path = 'sniffed_pkts.csv'
         with open(self.json_file_path, 'w') as file:
             file.write('[\n')
+        with open(self.csv_file_path, 'w') as file:
+            file.write(
+                'no, Protocol, SrcIP, SrcPrt, DstIP, DstPrt, status, dst, src, type, Payload\n')
 
     def packet_handler(self, packet):
         if "IP" not in packet:
@@ -26,8 +31,6 @@ class Sniffer:
         dest_mac = ""
         received_or_sent = ""
         packet_load = ""
-
-        # hexdump(packet)
         src_ip = packet["IP"].src
         dest_ip = packet["IP"].dst
         src_mac = packet["Ether"].src
@@ -46,28 +49,40 @@ class Sniffer:
 
         packet_load = self.get_packet_load(packet)
 
+        self.packet_to_json(protocol, src_ip, src_port, dest_ip,
+                            dest_port, received_or_sent, src_mac, dest_mac, packet_load)
+
+        self.packet_to_csv(self.index, protocol, src_ip, src_port, dest_ip,
+                           dest_port, received_or_sent, src_mac, dest_mac, packet_load)
+
+    def packet_to_json(self, *args):
         packet_record = {
             "no": self.index,
-            "Protocol": protocol,
-            "SrcIP": src_ip,
-            "SrcPrt": src_port,
-            "DstIP": dest_ip,
-            "DstPrt": dest_port,
-            "status": received_or_sent,
+            "Protocol": args[0],
+            "SrcIP": args[1],
+            "SrcPrt": args[2],
+            "DstIP": args[3],
+            "DstPrt": args[4],
+            "status": args[5],
             "Info": {
-                "Ethernet": {"dst": dest_mac,
-                             "src": src_mac,
+                "Ethernet": {"dst": args[7],
+                             "src": args[6],
                              "type": "IPv4"
                              }
             },
-            "Payload": str(packet_load)
+            "Payload": str(args[8])
         }
         with open(self.json_file_path, 'a') as file:
             file.write(json.dumps(packet_record))
             file.write(',\n')
-        # time.sleep(0.3)
-        print(self.index)
+        time.sleep(0.3)
+        # print(self.index)
         self.index += 1
+
+    def packet_to_csv(self, *args):
+        with open(self.csv_file_path, 'a', newline='') as file:
+            writer = csv.writer(file)
+            writer.writerow(args)
 
     def TCP_packet_handler(self, packet):
         source_port = packet["TCP"].sport
@@ -95,9 +110,7 @@ class Sniffer:
         self.running = True
         packet_capture_thread = threading.Thread(target=self.capture_packets)
         packet_capture_thread.start()
-
         time.sleep(duration)
-
         self.stop_sniffing()
 
     def capture_packets(self):
@@ -106,7 +119,7 @@ class Sniffer:
                   prn=self.packet_handler, count=1, store=0)
 
     def stop_sniffing(self):
-        #time.sleep(0.3)
+        time.sleep(3)
         with open(self.json_file_path, 'a') as file:
             file.write(']')
         self.running = False
