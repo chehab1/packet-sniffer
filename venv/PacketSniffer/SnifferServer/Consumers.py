@@ -27,10 +27,8 @@ class SnifferConsumer(WebsocketConsumer):
         self.connection = True
         self.room_group_name = 'test'
         self.list = []
-        self.sniffer = Sniffer("Wi-Fi", self.list)
-        # self.read_thread = threading.Thread(target=self.sniffer.start_sniffing, args=(10))
-        # self.read_thread.start()
-        self.sniffer.start_sniffing(1)
+        self.sniffer = Sniffer("Ethernet", self.list)
+        self.sniffer.start_sniffing()
         self.accept()
         self.index = 0
         print("connection started")
