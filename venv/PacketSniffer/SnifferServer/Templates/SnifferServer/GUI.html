@@ -17,16 +17,16 @@
       let url = `ws://${window.location.host}/ws/socket-server/`;
       const sniffSocket = new WebSocket(url);
 
-      sniffSocket.onopen = function (e) {
-        alert("[open] Connection established");
-        alert("Sending to server");
-        sniffSocket.send("My name is John");
-      };
+      // sniffSocket.onopen = function (e) {
+      //   alert("[open] Connection established");
+      //   alert("Sending to server");
+      //   sniffSocket.send("My name is John");
+      // };
 
       sniffSocket.onclose = (e) => {
         console.log("connection closed");
       };
-      sniffSocket.onmessage = (e) => {
+      sniffSocket.onmessage = (e) => {  
         let data = JSON.parse(e.data);
         console.log(data);
 

@@ -1,5 +1,4 @@
 import "./styles.css";
-import useGetPackets from "../../shared/useGetPackets";
 import { useContext } from 'react';
 import { PacketsContext }  from '../../contexts/packetsContext';
 
@@ -7,7 +6,7 @@ import { PacketsContext }  from '../../contexts/packetsContext';
 function Header({ start, setStart }) {
     
     let {packets,setPackets} = useContext(PacketsContext);
-    useGetPackets(start, setStart, setPackets);
+    // useGetPackets(start, setStart, setPackets);
 
     return (
         <div className="row d-flex justify-content-center Header">

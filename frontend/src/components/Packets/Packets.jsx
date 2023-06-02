@@ -7,6 +7,10 @@ function Packets({setIndex}) {
   let {packets,setPackets} = useContext(PacketsContext);
 
   return (
+    <>
+    {
+      packets.length > 0
+      &&
     <div className="tableContainer">
       <table className="table">
         <thead>
@@ -34,7 +38,7 @@ function Packets({setIndex}) {
                 <td>{packet.DstPrt}</td>
                 <td>{packet.status}</td>
                 <td>
-                  <button onClick={() => setIndex(packet.no -1)}>
+                  <button onClick={() => setIndex(packet.no)}>
                     <Icon>add_circle</Icon>
                   </button>
                 </td> 
@@ -45,6 +49,8 @@ function Packets({setIndex}) {
         </tbody>
       </table>
     </div>
+}
+    </>
   );
 }
 
