@@ -12,13 +12,13 @@ import random
 from SnifferServer.sniffer import Sniffer
 
 
-
-def fn():
-    f = open(
-        r"D:\Mina\Term 8\Computer Networks\packet-sniffer\sniffed_pkts.json")
-    data = json.load(f)
-    f.close()
-    return data
+# l philoooooooooooo
+# def fn():
+#     f = open(
+#         r"D:\Mina\Term 8\Computer Networks\packet-sniffer\sniffed_pkts.json")
+#     data = json.load(f)
+#     f.close()
+#     return data
 
 
 class SnifferConsumer(WebsocketConsumer):
@@ -27,7 +27,7 @@ class SnifferConsumer(WebsocketConsumer):
         self.connection = True
         self.room_group_name = 'test'
         self.list = []
-        self.sniffer = Sniffer("Ethernet", self.list)
+        self.sniffer = Sniffer("Wi-Fi", self.list)
         # self.read_thread = threading.Thread(target=self.sniffer.start_sniffing, args=(10))
         # self.read_thread.start()
         self.sniffer.start_sniffing(1)

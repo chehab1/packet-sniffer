@@ -1,19 +1,45 @@
 import { useEffect } from "react";
+import { w3cwebsocket as W3CWebSocket } from "websocket";
 import packets from "../packets.json";
 
-function useGetPackets(start,setStart, setPackets){
-     function getPackets(){
-        try{
-            setPackets(packets)
-        }catch(err){ 
-            console.log(err);
-        }finally{
-        }
+let GlobalPackets = [];
+let connection = null;
+function useGetPackets(start, setPackets, state, setState, loading, setLoading) {
+  
+  function getPackets() {
+    setLoading(true);
+    if (!connection)
+      connection = new W3CWebSocket(
+        "ws://127.0.0.1:8000/ws/" + "socket-server" + "/"
+      );
 
+    connection.onopen = () => {
+      console.log("WebSocket Client Connected");
+    };
+    connection.onmessage = (message) => {
+      
+      const dataFromServer = JSON.parse(message.data);
+
+      if (dataFromServer) {
+        setLoading(false);
+
+        setState((state) => ({
+          messages: dataFromServer,
+        }));
+          console.log(dataFromServer)
+          GlobalPackets.push(dataFromServer);
+          setPackets(GlobalPackets);
+      }
+    };
+  }
+  useEffect(() => {
+    if (start) getPackets();
+    else{
+        GlobalPackets = [];
+        connection = null;
+        if(packets.length)
+          setPackets([]);
     }
-    useEffect(() => {
-        if (start)
-            getPackets();
-    } ,[start]);
+  }, [start]);
 }
-export default useGetPackets;   
+export default useGetPackets;

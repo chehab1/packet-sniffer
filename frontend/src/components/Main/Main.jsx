@@ -3,7 +3,7 @@ import PacketInfo from "../PacketInfo/PacketInfo";
 import {useState} from 'react';
 
 function Main({ start }) {
-    let [index, setIndex] = useState(1);
+    let [index, setIndex] = useState(0);
     return (
         <>
         {start && (
