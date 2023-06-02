@@ -27,8 +27,9 @@ function App() {
       {
       <PacketsContext.Provider value={{ packets, setPackets }}>
         <Header {...{ start, setStart }} />
-        {loading && start &&<Loading />}
-        {!loading &&  <Main {...{ start }} />}
+        <Loading />
+        {/* {(loading || !loading) && start &&<Loading />} */}
+        {start &&  <Main {...{ start }} />}
 
       </PacketsContext.Provider>
       }

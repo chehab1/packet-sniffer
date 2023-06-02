@@ -7,7 +7,7 @@ function Main({ start }) {
     return (
         <>
         {start && (
-            <div>
+            <div style={{ marginTop: '150px' }}>
             <Packets {...{setIndex}} />
             <PacketInfo {...{index}} />
             </div>
