@@ -4,8 +4,14 @@ import packets from "../packets.json";
 
 let GlobalPackets = [];
 let connection = null;
-function useGetPackets(start, setPackets, state, setState, loading, setLoading) {
-  
+function useGetPackets(
+  start,
+  setPackets,
+  state,
+  setState,
+  loading,
+  setLoading
+) {
   function getPackets() {
     setLoading(true);
     if (!connection)
@@ -17,7 +23,6 @@ function useGetPackets(start, setPackets, state, setState, loading, setLoading) 
       console.log("WebSocket Client Connected");
     };
     connection.onmessage = (message) => {
-      
       const dataFromServer = JSON.parse(message.data);
 
       if (dataFromServer) {
@@ -26,19 +31,19 @@ function useGetPackets(start, setPackets, state, setState, loading, setLoading) 
         setState((state) => ({
           messages: dataFromServer,
         }));
-          console.log(dataFromServer)
-          GlobalPackets.push(dataFromServer);
-          setPackets(GlobalPackets);
+        console.log(dataFromServer);
+        GlobalPackets.push(dataFromServer);
+        setPackets(GlobalPackets);
       }
     };
   }
   useEffect(() => {
     if (start) getPackets();
-    else{
-        GlobalPackets = [];
-        connection = null;
-        if(packets.length)
-          setPackets([]);
+    else {
+      if (connection) connection.close();
+      GlobalPackets = [];
+      connection = null;
+      if (packets.length) setPackets([]);
     }
   }, [start]);
 }

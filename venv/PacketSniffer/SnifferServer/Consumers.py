@@ -27,7 +27,7 @@ class SnifferConsumer(WebsocketConsumer):
         self.connection = True
         self.room_group_name = 'test'
         self.list = []
-        self.sniffer = Sniffer("Ethernet", self.list)
+        self.sniffer = Sniffer("Wi-Fi", self.list)
         self.sniffer.start_sniffing()
         self.accept()
         self.index = 0
@@ -55,6 +55,8 @@ class SnifferConsumer(WebsocketConsumer):
     def disconnect(self, code):
         self.stop = True
         del self.thread
+        with open("sniffed_plts.json", 'a') as file:
+            file.write(']')
         print("connection closed")
         print("#######################################")
         print(self.connection)
