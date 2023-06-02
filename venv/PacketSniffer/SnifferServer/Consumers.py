@@ -12,15 +12,6 @@ import random
 from SnifferServer.sniffer import Sniffer
 
 
-# l philoooooooooooo
-# def fn():
-#     f = open(
-#         r"D:\Mina\Term 8\Computer Networks\packet-sniffer\sniffed_pkts.json")
-#     data = json.load(f)
-#     f.close()
-#     return data
-
-
 class SnifferConsumer(WebsocketConsumer):
 
     def connect(self):
@@ -46,7 +37,7 @@ class SnifferConsumer(WebsocketConsumer):
             try:
                 self.send(json.dumps(self.list[self.index]))
                 self.index += 1
-                time.sleep(0.2)
+                time.sleep(0.1)
                 if self.stop:
                     break
             except:
@@ -55,7 +46,7 @@ class SnifferConsumer(WebsocketConsumer):
     def disconnect(self, code):
         self.stop = True
         del self.thread
-        with open("sniffed_plts.json", 'a') as file:
+        with open("sniffed_pkts.json", 'a') as file:
             file.write(']')
         print("connection closed")
         print("#######################################")
