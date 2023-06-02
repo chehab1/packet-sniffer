@@ -56,8 +56,6 @@ class Sniffer:
         self.packet_to_csv(self.index, protocol, src_ip, src_port, dest_ip,
                            dest_port, received_or_sent, src_mac, dest_mac, "IPv4", packet_load)
         self.index += 1
-        # print(self.index)
-        # time.sleep(0.2)
 
     def packet_to_json(self, *args):
         packet_record = {
@@ -122,9 +120,8 @@ class Sniffer:
 
     def stop_sniffing(self):
         self.running = False
-        # time.sleep(3)
-        with open(self.json_file_path, 'a') as file:
-            file.write(']')
+        # with open(self.json_file_path, 'a') as file:
+        #     file.write(']')
 
 
 # if __name__ == "__main__":

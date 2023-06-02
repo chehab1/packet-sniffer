@@ -55,6 +55,8 @@ class SnifferConsumer(WebsocketConsumer):
     def disconnect(self, code):
         self.stop = True
         del self.thread
+        with open("sniffed_plts.json", 'a') as file:
+            file.write(']')
         print("connection closed")
         print("#######################################")
         print(self.connection)
