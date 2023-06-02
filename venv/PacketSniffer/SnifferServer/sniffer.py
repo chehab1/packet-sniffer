@@ -7,7 +7,6 @@ import csv
 
 class Sniffer:
     def __init__(self, interface, list_of_packets):
-        # print(interface)
         self.interface = interface
         self.local_ip = self.get_local_ip()
         self.index = 0
@@ -110,11 +109,10 @@ class Sniffer:
         temp_socket.close()
         return local_ip
 
-    def start_sniffing(self, duration):
+    def start_sniffing(self):
         self.running = True
         packet_capture_thread = threading.Thread(target=self.capture_packets)
         packet_capture_thread.start()
-        # time.sleep(duration)
         self.stop_sniffing()
 
     def capture_packets(self):
