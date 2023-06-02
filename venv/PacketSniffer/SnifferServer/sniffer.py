@@ -114,17 +114,17 @@ class Sniffer:
         self.running = True
         packet_capture_thread = threading.Thread(target=self.capture_packets)
         packet_capture_thread.start()
-        time.sleep(duration)
+        # time.sleep(duration)
         self.stop_sniffing()
 
     def capture_packets(self):
         while self.running:
             sniff(iface=self.interface,
-                  prn=self.packet_handler, count=1, store=0)
+                  prn=self.packet_handler, count=100, store=0)
 
     def stop_sniffing(self):
         self.running = False
-        time.sleep(3)
+        # time.sleep(3)
         with open(self.json_file_path, 'a') as file:
             file.write(']')
 
