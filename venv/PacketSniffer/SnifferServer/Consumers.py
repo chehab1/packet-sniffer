@@ -12,13 +12,13 @@ import random
 from SnifferServer.sniffer import Sniffer
 
 
-
-def fn():
-    f = open(
-        r"D:\Mina\Term 8\Computer Networks\packet-sniffer\sniffed_pkts.json")
-    data = json.load(f)
-    f.close()
-    return data
+# l philoooooooooooo
+# def fn():
+#     f = open(
+#         r"D:\Mina\Term 8\Computer Networks\packet-sniffer\sniffed_pkts.json")
+#     data = json.load(f)
+#     f.close()
+#     return data
 
 
 class SnifferConsumer(WebsocketConsumer):
