@@ -7,7 +7,7 @@ function Loading() {
   setTimeout(() => {
      let x = pos;
       x += 1;
-      if (x == 1440) x = 0;
+      if (x == 1420) x = 0;
       document.getElementById("dogImage").style.left = x + "px";
       setPos(x);
   },5);
