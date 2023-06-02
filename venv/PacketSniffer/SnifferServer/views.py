@@ -7,11 +7,9 @@ def Home(request):
     return render(request, 'SnifferServer/GUI.html')
 
 def History(request):
+    with open("sniffed_pkts.json", 'r') as file:
+            json_data = file.read()
 
-    f = open(r"D:\Mina\Term 8\Computer Networks\packet-sniffer\sniffed_pkts.json")
-    data = json.load(f)
-    f.close()
-    
-    return render(request, 'SnifferServer/GUI.html', {
-        'data' : data
-    })
+    response = HttpResponse(json_data, content_type='application/json')
+    response['Content-Disposition'] = f'attachment; filename=sniffed_pkts.json'
+    return response

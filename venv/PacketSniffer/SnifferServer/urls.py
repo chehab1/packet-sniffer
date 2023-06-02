@@ -3,5 +3,5 @@ from . import views
 
 urlpatterns = [
     path('',views.Home),
-    path('/history',views.History)
+    path('history',views.History)
 ]
